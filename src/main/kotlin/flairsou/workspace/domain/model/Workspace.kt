@@ -1,4 +1,4 @@
-package flairsou.workspace.model
+package flairsou.workspace.domain.model
 
 data class Workspace(val uuid: String) {
 

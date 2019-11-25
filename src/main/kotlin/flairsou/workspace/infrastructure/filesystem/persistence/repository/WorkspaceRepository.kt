@@ -1,18 +1,19 @@
-package flairsou.workspace.repository
+package flairsou.workspace.infrastructure.filesystem.persistence.repository
 
 import com.beust.klaxon.Klaxon
-import flairsou.workspace.model.Workspace
+import flairsou.workspace.domain.model.Workspace
+import flairsou.workspace.domain.repository.IWorkspaceRepository
 import java.io.File
 import java.io.FileWriter
 
-object WorkspaceRepository {
+object WorkspaceRepository : IWorkspaceRepository {
 
     private val workspacePath = "${System.getProperty("user.home")}${File.pathSeparator}${Workspace.workspaceName}"
     private val workspaceFilename = "workspace.json"
     private val filePath = "$workspacePath{${File.pathSeparator}$workspaceFilename"
 
 
-    fun findOneByUuid(uuid: String): Workspace? {
+    override fun findUniqueOne(): Workspace? {
         val file = File(filePath)
 
         if (!file.exists()) {
@@ -22,7 +23,7 @@ object WorkspaceRepository {
         return Klaxon().parse<Workspace>(file)
     }
 
-    fun save(workspace: Workspace) {
+    override fun save(workspace: Workspace) {
         val json = Klaxon().toJsonString(workspace)
 
         val fileWriter = FileWriter(filePath)
