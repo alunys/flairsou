@@ -8,7 +8,7 @@ import java.io.FileWriter
 
 object WorkspaceRepository : IWorkspaceRepository {
 
-    private val workspacePath = "${System.getProperty("user.home")}${File.pathSeparator}${Workspace.workspaceName}"
+    private val workspacePath = "${System.getProperty("user.home")}${File.pathSeparator}.${Workspace.workspaceName}"
     private val workspaceFilename = "workspace.json"
     private val filePath = "$workspacePath{${File.pathSeparator}$workspaceFilename"
 

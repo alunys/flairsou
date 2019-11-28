@@ -4,7 +4,7 @@ data class Workspace(val uuid: String) {
 
 
     companion object{
-        val workspaceName=""
+        val workspaceName="flairsou"
 
     }
 
