@@ -8,13 +8,11 @@ import java.io.FileWriter
 
 object WorkspaceRepository : IWorkspaceRepository {
 
-    private val workspacePath = "${System.getProperty("user.home")}${File.pathSeparator}${Workspace.workspaceName}"
-    private val workspaceFilename = "workspace.json"
-    private val filePath = "$workspacePath{${File.pathSeparator}$workspaceFilename"
-
+    private const val workspaceFilename = "workspace.json"
+    private fun retrieveWorkspaceDirectoryPath():String = "${System.getProperty("user.home")}${File.separator}.${Workspace.workspaceName}"
 
     override fun findUniqueOne(): Workspace? {
-        val file = File(filePath)
+        val file = File(this.retrieveWorkspaceDirectoryPath(), this.workspaceFilename)
 
         if (!file.exists()) {
             return null
@@ -24,9 +22,13 @@ object WorkspaceRepository : IWorkspaceRepository {
     }
 
     override fun save(workspace: Workspace) {
+
+        val workspaceDirectory = File(retrieveWorkspaceDirectoryPath())
+        workspaceDirectory.mkdirs()
+
         val json = Klaxon().toJsonString(workspace)
 
-        val fileWriter = FileWriter(filePath)
+        val fileWriter = FileWriter(File(workspaceDirectory, this.workspaceFilename))
         fileWriter.write(json)
         fileWriter.close()
     }

@@ -49,7 +49,8 @@ dependencies {
 
     testImplementation(
             "org.spekframework.spek2:spek-dsl-jvm:2.0.8",
-            "ch.tutteli.atrium:atrium-fluent-en_GB:$atrium_version"
+            "ch.tutteli.atrium:atrium-fluent-en_GB:$atrium_version",
+            "io.mockk:mockk:1.9.3"
     )
     testRuntimeOnly(
             "org.spekframework.spek2:spek-runner-junit5:2.0.8",
