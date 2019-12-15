@@ -5,6 +5,7 @@ import ch.tutteli.atrium.api.fluent.en_GB.isA
 import ch.tutteli.atrium.api.fluent.en_GB.toBe
 import ch.tutteli.atrium.domain.builders.migration.asExpect
 import ch.tutteli.atrium.verbs.expect
+import flairsou.common.infrastructure.exposed.WIPDatabase
 import flairsou.workspace.domain.model.Workspace
 import flairsou.workspace.infrastructure.filesystem.persistence.repository.WorkspaceRepository
 import io.mockk.every
@@ -18,6 +19,10 @@ import java.nio.file.Paths
 import java.util.*
 
 object WorkspaceRepositoryTest : Spek({
+
+    val workspaceRepository by memoized {
+        WorkspaceRepository()
+    }
 
     group("method findUniqueOne") {
 
@@ -37,7 +42,7 @@ object WorkspaceRepositoryTest : Spek({
 
                 every { System.getProperty("user.home") } returns homeDirTest
 
-                val workspace = WorkspaceRepository.findUniqueOne()
+                val workspace = workspaceRepository.findUniqueOne()
 
                 expect(workspace).asExpect().toBe(null)
             }
@@ -51,7 +56,7 @@ object WorkspaceRepositoryTest : Spek({
 
                 every { System.getProperty("user.home") } returns homeDirTest
 
-                val workspace = WorkspaceRepository.findUniqueOne()
+                val workspace = workspaceRepository.findUniqueOne()
 
                 expect(workspace).asExpect().isA<Workspace>()
                     .feature { f(it::uuid) }.toBe("uuid-test")
@@ -84,12 +89,12 @@ object WorkspaceRepositoryTest : Spek({
 
             val workspaceCreated = Workspace(UUID.randomUUID().toString())
 
-            WorkspaceRepository.save(workspaceCreated)
+            workspaceRepository.save(workspaceCreated)
 
             val files = File(homeDirTest).listFiles()
             expect(files?.size).asExpect().equals(1)
 
-            expect(WorkspaceRepository.findUniqueOne()).asExpect().isA<Workspace>()
+            expect(workspaceRepository.findUniqueOne()).asExpect().isA<Workspace>()
                 .feature { f(it::uuid) }.toBe(workspaceCreated.uuid)
         }
 
@@ -97,9 +102,9 @@ object WorkspaceRepositoryTest : Spek({
 
             val workspaceCreated = Workspace(UUID.randomUUID().toString())
 
-            WorkspaceRepository.save(workspaceCreated)
+            workspaceRepository.save(workspaceCreated)
 
-            expect(WorkspaceRepository.findUniqueOne()).asExpect().isA<Workspace>()
+            expect(workspaceRepository.findUniqueOne()).asExpect().isA<Workspace>()
                 .feature { f(it::uuid) }.toBe(workspaceCreated.uuid)
         }
     }

@@ -6,19 +6,29 @@ import flairsou.workspace.domain.repository.IWorkspaceRepository
 import java.io.File
 import java.io.FileWriter
 
-object WorkspaceRepository : IWorkspaceRepository {
+class WorkspaceRepository : IWorkspaceRepository {
 
-    private const val workspaceFilename = "workspace.json"
-    private fun retrieveWorkspaceDirectoryPath():String = "${System.getProperty("user.home")}${File.separator}.${Workspace.workspaceName}"
+    private var workspace: Workspace? = null
+
+    private fun retrieveWorkspaceDirectoryPath(): String =
+        "${System.getProperty("user.home")}${File.separator}.${Workspace.workspaceName}"
+
+    companion object {
+        private const val workspaceFilename = "workspace.json"
+    }
 
     override fun findUniqueOne(): Workspace? {
-        val file = File(this.retrieveWorkspaceDirectoryPath(), this.workspaceFilename)
+        if(null === this.workspace) {
+            val file = File(this.retrieveWorkspaceDirectoryPath(), workspaceFilename)
 
-        if (!file.exists()) {
-            return null
+            if (!file.exists()) {
+                return null
+            }
+
+            this.workspace = Klaxon().parse<Workspace>(file)
         }
 
-        return Klaxon().parse<Workspace>(file)
+        return this.workspace
     }
 
     override fun save(workspace: Workspace) {
@@ -28,7 +38,7 @@ object WorkspaceRepository : IWorkspaceRepository {
 
         val json = Klaxon().toJsonString(workspace)
 
-        val fileWriter = FileWriter(File(workspaceDirectory, this.workspaceFilename))
+        val fileWriter = FileWriter(File(workspaceDirectory, workspaceFilename))
         fileWriter.write(json)
         fileWriter.close()
     }

@@ -6,11 +6,10 @@ import ch.tutteli.atrium.verbs.expect
 import org.spekframework.spek2.Spek
 import java.nio.file.Paths
 
-object AbstractDatabaseTest : Spek({
+object WIPDatabaseTest : Spek({
 
         val database by memoized {
-            class TestDatabase:AbstractDatabase("${Paths.get("").toAbsolutePath().toString()}/src/test/tmp/testDatabase.db")
-            val database  = TestDatabase()
+            val database  = WIPDatabase("${Paths.get("").toAbsolutePath().toString()}/src/test/tmp/testDatabase.db")
             database
         }
 
