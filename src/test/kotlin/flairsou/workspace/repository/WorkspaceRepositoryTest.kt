@@ -4,7 +4,7 @@ import ch.tutteli.atrium.api.fluent.en_GB.feature
 import ch.tutteli.atrium.api.fluent.en_GB.isA
 import ch.tutteli.atrium.api.fluent.en_GB.toBe
 import ch.tutteli.atrium.domain.builders.migration.asExpect
-import ch.tutteli.atrium.verbs.expect
+import ch.tutteli.atrium.api.verbs.expect
 import flairsou.common.infrastructure.exposed.WIPDatabase
 import flairsou.workspace.domain.model.Workspace
 import flairsou.workspace.infrastructure.filesystem.persistence.repository.WorkspaceRepository
@@ -44,7 +44,7 @@ object WorkspaceRepositoryTest : Spek({
 
                 val workspace = workspaceRepository.findUniqueOne()
 
-                expect(workspace).asExpect().toBe(null)
+                expect(workspace).toBe(null)
             }
         }
 
@@ -58,7 +58,7 @@ object WorkspaceRepositoryTest : Spek({
 
                 val workspace = workspaceRepository.findUniqueOne()
 
-                expect(workspace).asExpect().isA<Workspace>()
+                expect(workspace).isA<Workspace>()
                     .feature { f(it::uuid) }.toBe("uuid-test")
             }
 
@@ -92,9 +92,9 @@ object WorkspaceRepositoryTest : Spek({
             workspaceRepository.save(workspaceCreated)
 
             val files = File(homeDirTest).listFiles()
-            expect(files?.size).asExpect().equals(1)
+            expect(files?.size).equals(1)
 
-            expect(workspaceRepository.findUniqueOne()).asExpect().isA<Workspace>()
+            expect(workspaceRepository.findUniqueOne()).isA<Workspace>()
                 .feature { f(it::uuid) }.toBe(workspaceCreated.uuid)
         }
 
@@ -104,7 +104,7 @@ object WorkspaceRepositoryTest : Spek({
 
             workspaceRepository.save(workspaceCreated)
 
-            expect(workspaceRepository.findUniqueOne()).asExpect().isA<Workspace>()
+            expect(workspaceRepository.findUniqueOne()).isA<Workspace>()
                 .feature { f(it::uuid) }.toBe(workspaceCreated.uuid)
         }
     }
